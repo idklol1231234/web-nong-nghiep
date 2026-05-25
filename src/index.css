@@ -1,0 +1,112 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;650&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+}
+
+/* Global Transition Rules for elegant animations */
+* {
+  transition-property: background-color, border-color, text-color, fill, stroke;
+  transition-duration: 200ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Dynamic Frosted Glass Overrides in Dark Mode */
+.dark .bg-slate-900,
+.dark .bg-slate-900\/95,
+.dark .bg-slate-900\/80,
+.dark .bg-slate-900\/70,
+.dark .bg-slate-950,
+.dark .bg-slate-950\/60,
+.dark .bg-slate-950\/40,
+.dark .bg-slate-950\/20,
+.dark .bg-[#1e293b],
+.dark .bg-slate-800 {
+  background-color: rgba(15, 23, 42, 0.35) !important;
+  backdrop-filter: blur(18px) !important;
+  -webkit-backdrop-filter: blur(18px) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.dark .border-slate-800,
+.dark .border-slate-800\/80,
+.dark .border-slate-800\/60,
+.dark .border-slate-800\/40,
+.dark .border-slate-700,
+.dark .border-slate-700\/50,
+.dark .border-slate-200,
+.dark .border-slate-100 {
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.dark .bg-white\/5,
+.dark .bg-white\/10,
+.dark .bg-slate-950\/10 {
+  background-color: rgba(255, 255, 255, 0.05) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Dynamic Frosted Glass Overrides in Light Mode */
+.bg-white,
+.bg-slate-50\/50,
+.bg-slate-50,
+.bg-slate-100\/50 {
+  background-color: rgba(255, 255, 255, 0.65) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border-color: rgba(15, 23, 42, 0.06) !important;
+}
+
+.border-slate-100,
+.border-slate-200,
+.border-slate-200\/60,
+.border-slate-200\/50 {
+  border-color: rgba(15, 23, 42, 0.06) !important;
+}
+
+/* Ambient glow animations for specific alerts or highlights */
+@keyframes ambientGlow {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.05);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(16, 185, 129, 0.15);
+  }
+}
+
+.glow-ambient {
+  animation: ambientGlow 4s infinite ease-in-out;
+}
+
+/* Recharts charts tooltip custom frosted containers */
+.recharts-default-tooltip {
+  background-color: rgba(15, 23, 42, 0.8) !important;
+  backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: #fff !important;
+  border-radius: 12px !important;
+}
+
+/* Text adjustments for dark mode high contrast readability */
+.dark .text-slate-900 {
+  color: #f1f5f9 !important;
+}
+.dark .text-slate-850 {
+  color: #cbd5e1 !important;
+}
+.dark .text-slate-800 {
+  color: #e2e8f0 !important;
+}
+.dark .text-slate-700 {
+  color: #cbd5e1 !important;
+}
+.dark .text-slate-650 {
+  color: #cbd5e1 !important;
+}
+.dark .text-slate-600 {
+  color: #94a3b8 !important;
+}
