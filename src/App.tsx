@@ -1,3 +1,20 @@
+
+import { initializeApp } from "firebase/app";
+import { getDatabase, ref, onValue } from "firebase/database";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAO7e4lt1bMH9QWIQpwQ-aFb-gg1pUiVIM",
+  authDomain: "htgstnrludai.firebaseapp.com",
+  databaseURL: "https://htgstnrludai-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "htgstnrludai",
+  storageBucket: "htgstnrludai.firebasestorage.app",
+  messagingSenderId: "295019402400",
+  appId: "1:295019402400:web:bdeaa27fe53531e19025c5",
+  measurementId: "G-P49QX3QMR7"
+};
+
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import Sidebar from "./components/Sidebar";
@@ -128,7 +145,53 @@ const INITIAL_LOGS: DiaryLog[] = [
 
 // Core app container
 export default function App() {
-  const [farms, setFarms] = useState<Farm[]>(INITIAL_FARMS);
+  // --- ĐOẠN CODE ĐỌC DỮ LIỆU TỪ FIREBASE ĐỂ HIỂN THỊ VÀ ĐƯA RA LỜI KHUYÊN ---
+  const [realtimeSensors, setRealtimeSensors] = React.useState({
+    N: 92, P: 38, K: 58, ph: 4.8, waterlevel: 5.5, temperature: 32, humidity: 82
+  });
+
+  React.useEffect(() => {
+    // Kết nối đến node gốc của Realtime Database
+    const sensorRef = ref(database, '/');
+    
+    // Lắng nghe dữ liệu thay đổi liên tục
+    const unsubscribe = onValue(sensorRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        console.log("Dữ liệu thực tế từ Firebase:", data);
+        // Cập nhật các chỉ số thực tế nhận được từ cảm biến phần cứng
+        setRealtimeSensors({
+          N: data.N || data.nito || 92,
+          P: data.P || data.photpho || 38,
+          K: data.K || data.kali || 58,
+          ph: data.ph || data.pH || 4.8,
+          waterlevel: data.waterlevel || data.mucnuoc || 5.5,
+          temperature: data.temperature || data.nhietdo || 32,
+          humidity: data.humidity || data.doam || 82
+        });
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+  // -------------------------------------------------------------------------
+  const [farms, setFarms] = useState<Farm[]>(() => {
+    const defaultFarms = [...INITIAL_FARMS];
+    if (defaultFarms[0]) {
+      defaultFarms[0].sensors = realtimeSensors;
+    }
+    return defaultFarms;
+  });
+
+  useEffect(() => {
+    setFarms(prev => {
+      const updated = [...prev];
+      if (updated[0]) {
+        updated[0].sensors = realtimeSensors;
+      }
+      return updated;
+    });
+  }, [realtimeSensors]);
   const [selectedFarm, setSelectedFarm] = useState<Farm>(INITIAL_FARMS[0]);
   const [currentTab, setCurrentTab] = useState<string>("dashboard");
   const [darkTheme, setDarkTheme] = useState<boolean>(true);
