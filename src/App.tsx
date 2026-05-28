@@ -178,7 +178,10 @@ export default function App() {
   const [farms, setFarms] = useState<Farm[]>(() => {
     const defaultFarms = [...INITIAL_FARMS];
     if (defaultFarms[0]) {
-      defaultFarms[0].sensors = realtimeSensors;
+      defaultFarms[0].sensors = {
+        ...realtimeSensors,
+        waterlevel: realtimeSensors.waterlevel // Ép lấy trực tiếp từ Firebase
+      };
     }
     return defaultFarms;
   });
@@ -187,12 +190,14 @@ export default function App() {
     setFarms(prev => {
       const updated = [...prev];
       if (updated[0]) {
-        updated[0].sensors = realtimeSensors;
+        updated[0].sensors = {
+          ...realtimeSensors,
+          waterlevel: realtimeSensors.waterlevel // Ép cập nhật liên tục từ Firebase
+        };
       }
       return updated;
     });
   }, [realtimeSensors]);
-  const [selectedFarm, setSelectedFarm] = useState<Farm>(INITIAL_FARMS[0]);
   const [currentTab, setCurrentTab] = useState<string>("dashboard");
   const [darkTheme, setDarkTheme] = useState<boolean>(true);
   
