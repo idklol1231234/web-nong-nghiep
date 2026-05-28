@@ -165,7 +165,7 @@ export default function App() {
           P: data.P || data.photpho || 38,
           K: data.K || data.kali || 58,
           ph: data.ph || data.pH || 4.8,
-          waterlevel: data.waterlevel || data.mucnuoc || 5.5,
+          waterlevel: data.mucnuoc || data.waterlevel || 5.5,
           temperature: data.temperature || data.nhietdo || 32,
           humidity: data.humidity || data.doam || 82
         });
