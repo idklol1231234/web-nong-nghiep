@@ -146,7 +146,7 @@ const INITIAL_LOGS: DiaryLog[] = [
 // Core app container
 export default function App() {
   // 1. Khai báo state selectedFarm bị thiếu (lý do gây ra lỗi Cannot find name 'selectedFarm')
-    const [selectedFarm, setSelectedFarm] = React.useState<Farm>(null);
+    const [selectedFarm, setSelectedFarm] = React.useState<Farm>(INITIAL_FARMS[0]);
   // 2. Khai báo state lưu dữ liệu cảm biến
   const [realtimeSensors, setRealtimeSensors] = React.useState<SensorData>({
     N: 92, P: 38, K: 58, ph: 4.8, waterLevel: 5.5, temperature: 32, humidity: 82
