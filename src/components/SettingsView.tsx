@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Settings, Shield, MapPin, Sliders, BellDot, Check, Info } from "lucide-react";
 import { Farm } from "../types";
 
@@ -17,9 +17,19 @@ export default function SettingsView({ farm, onUpdateFarmStageAndRole, farms }: 
   const [waterLevelInput, setWaterLevelInput] = useState(farm.sensors.waterLevel.toString());
   const [isSaved, setIsSaved] = useState(false);
 
+  useEffect(() => {
+    setRoleInput(farm.role);
+    setStageInput(farm.growthStage);
+    setNitrogenInput(farm.sensors.N.toString());
+    setPotassiumInput(farm.sensors.K.toString());
+    setphInput(farm.sensors.ph.toString());
+    setWaterLevelInput(farm.sensors.waterLevel.toString());
+  }, [farm]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onUpdateFarmStageAndRole(stageInput, roleInput, {
+      ...farm.sensors,
       N: parseInt(nitrogenInput) || farm.sensors.N,
       K: parseInt(potassiumInput) || farm.sensors.K,
       ph: parseFloat(phInput) || farm.sensors.ph,

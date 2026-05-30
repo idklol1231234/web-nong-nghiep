@@ -146,11 +146,10 @@ const INITIAL_LOGS: DiaryLog[] = [
 // Core app container
 export default function App() {
   // 1. Khai báo state selectedFarm bị thiếu (lý do gây ra lỗi Cannot find name 'selectedFarm')
-  const [selectedFarm, setSelectedFarm] = React.useState<any>(null);
-
+    const [selectedFarm, setSelectedFarm] = React.useState<Farm>(null);
   // 2. Khai báo state lưu dữ liệu cảm biến
-  const [realtimeSensors, setRealtimeSensors] = React.useState({
-    N: 92, P: 38, K: 58, ph: 4.8, waterlevel: 5.5, temperature: 32, humidity: 82
+  const [realtimeSensors, setRealtimeSensors] = React.useState<SensorData>({
+    N: 92, P: 38, K: 58, ph: 4.8, waterLevel: 5.5, temperature: 32, humidity: 82
   });
 
   React.useEffect(() => {
@@ -168,7 +167,7 @@ export default function App() {
           P: data.P || data.photpho || 38,
           K: data.K || data.kali || 58,
           ph: data.ph || data.pH || 4.8,
-          waterlevel: data.mucnuoc || data.waterlevel || 5.5,
+          waterLevel: data.mucnuoc || data.waterlevel || 5.5,
           temperature: data.temperature || data.nhietdo || 32,
           humidity: data.humidity || data.doam || 82
         });
@@ -183,24 +182,35 @@ export default function App() {
     if (defaultFarms[0]) {
       defaultFarms[0].sensors = {
         ...realtimeSensors,
-        waterlevel: realtimeSensors.waterlevel // Ép lấy trực tiếp từ Firebase
+        waterLevel: realtimeSensors.waterLevel
       };
     }
     return defaultFarms;
   });
 
   useEffect(() => {
-    setFarms((prev: any) => {
-      const updated = [...prev];
-      if (updated[0]) {
-        updated[0].sensors = {
-          ...realtimeSensors,
-          waterlevel: realtimeSensors.waterlevel // Ép cập nhật liên tục từ Firebase
-        };
-      }
-      return updated;
+    setFarms((prev) => {
+      if (!prev[0]) return prev;
+
+      return prev.map((farm, index) =>
+        index === 0
+          ? {
+              ...farm,
+              sensors: { ...realtimeSensors }
+            }
+          : farm
+      );
     });
   }, [realtimeSensors]);
+
+  useEffect(() => {
+    if (selectedFarm.id !== INITIAL_FARMS[0]?.id) return;
+
+    setSelectedFarm((prev) => ({
+      ...prev,
+      sensors: { ...realtimeSensors }
+    }));
+  }, [realtimeSensors, selectedFarm.id]);
   const [currentTab, setCurrentTab] = useState<string>("dashboard");
   const [darkTheme, setDarkTheme] = useState<boolean>(true);
   
@@ -638,3 +648,5 @@ export default function App() {
     </div>
   );
 }
+
+
