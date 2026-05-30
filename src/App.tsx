@@ -145,7 +145,10 @@ const INITIAL_LOGS: DiaryLog[] = [
 
 // Core app container
 export default function App() {
-  // --- ĐOẠN CODE ĐỌC DỮ LIỆU TỪ FIREBASE ĐỂ HIỂN THỊ VÀ ĐƯA RA LỜI KHUYÊN ---
+  // 1. Khai báo state selectedFarm bị thiếu (lý do gây ra lỗi Cannot find name 'selectedFarm')
+  const [selectedFarm, setSelectedFarm] = React.useState<any>(null);
+
+  // 2. Khai báo state lưu dữ liệu cảm biến
   const [realtimeSensors, setRealtimeSensors] = React.useState({
     N: 92, P: 38, K: 58, ph: 4.8, waterlevel: 5.5, temperature: 32, humidity: 82
   });
@@ -187,7 +190,7 @@ export default function App() {
   });
 
   useEffect(() => {
-    setFarms(prev => {
+    setFarms((prev: any) => {
       const updated = [...prev];
       if (updated[0]) {
         updated[0].sensors = {
@@ -248,7 +251,7 @@ export default function App() {
   useEffect(() => {
     const { N, ph, waterLevel } = selectedFarm.sensors;
     const stage = selectedFarm.growthStage;
-    const dangerList = [];
+    const dangerList: any[] = [];
 
     // Check pH
     if (ph < 5.0) {
